@@ -25,6 +25,7 @@ const BLOCKED_EXTENSIONS = new Set([
   "mad", "maf", "mag", "mam", "maq", "mar", "mas", "mat", "mau", "mav", "maw",
   "mda", "mdb", "mde", "mdt", "mdw", "mdz", "ops", "osd", "pcd", "plg",
   "prf", "prg", "printerexport", "pst", "tmp",
+  "html", "htm", "xhtml", "mhtml", "mht", "shtml", "xht",
 ]);
 
 // "document.jpg.exe" — benign-looking suffix, dangerous true type at end.

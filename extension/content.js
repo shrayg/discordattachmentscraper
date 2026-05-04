@@ -111,6 +111,21 @@ function baseMimeType(contentType) {
     .toLowerCase();
 }
 
+// Never treat web pages as media (also closes relaxed-video edge cases).
+const WEB_DOC_EXT = new Set(["html", "htm", "xhtml", "mhtml", "mht", "shtml", "xht"]);
+
+function isBlockedWebDocument(ext, baseMime) {
+  if (ext && WEB_DOC_EXT.has(ext)) return true;
+  if (
+    baseMime === "text/html" ||
+    baseMime === "application/xhtml+xml" ||
+    baseMime === "text/xhtml"
+  ) {
+    return true;
+  }
+  return false;
+}
+
 /**
  * Typical image / video / GIF attachments. Images still require a matching
  * extension when the filename has one. Videos trust Discord's `video/*` and
@@ -127,6 +142,8 @@ function classifyAttachment(att) {
   const extVideo = ext && VIDEO_EXT.has(ext);
   const mimeImage = TYPICAL_IMAGE_MIMES.has(baseMime);
   const mimeVideo = TYPICAL_VIDEO_MIMES.has(baseMime);
+
+  if (isBlockedWebDocument(ext, baseMime)) return null;
 
   // Cross-kind mismatch: do not download
   if (extImage && (mimeVideo || baseMime.startsWith("video/"))) return null;

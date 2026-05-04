@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Discord Channel Media Downloader</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Discord Media Downloader</h1>
+      <p class="warn">
+        Self-bot use violates Discord ToS. Use a throwaway account only.
+      </p>
+    </header>
+
+    <section class="card" id="contextCard">
+      <div class="row">
+        <span class="label">Tab</span>
+        <span class="value" id="tabUrl">&mdash;</span>
+      </div>
+      <div class="row">
+        <span class="label">Server</span>
+        <span class="value" id="guildId">&mdash;</span>
+      </div>
+      <div class="row">
+        <span class="label">Channel</span>
+        <span class="value" id="channelId">&mdash;</span>
+      </div>
+      <div class="row">
+        <span class="label">Auth captured</span>
+        <span class="value" id="authStatus">No</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="actions">
+        <button id="startBtn" class="primary" disabled>Download all media in this channel</button>
+        <button id="stopBtn" class="secondary" disabled>Stop</button>
+      </div>
+      <p class="hint" id="hint">
+        Open a Discord channel in the active tab. Click around once so the
+        extension can capture your auth header, then start.
+      </p>
+    </section>
+
+    <section class="card" id="progressCard" hidden>
+      <h2>Progress</h2>
+      <div class="grid">
+        <div><span class="label">Status</span><span class="value" id="runStatus">idle</span></div>
+        <div><span class="label">Messages scanned</span><span class="value" id="msgCount">0</span></div>
+        <div><span class="label">Attachments found</span><span class="value" id="foundCount">0</span></div>
+        <div><span class="label">Skipped (security)</span><span class="value" id="skippedSecurityCount">0</span></div>
+        <div><span class="label">Queued for download</span><span class="value" id="queuedCount">0</span></div>
+        <div><span class="label">Oldest message id</span><span class="value mono" id="oldestId">&mdash;</span></div>
+        <div><span class="label">Elapsed</span><span class="value" id="elapsed">0s</span></div>
+      </div>
+      <p class="error" id="errorBox" hidden></p>
+    </section>
+
+    <section class="card">
+      <details>
+        <summary>Advanced</summary>
+        <div class="actions">
+          <button id="resetDedupeBtn" class="secondary">Reset download dedupe cache</button>
+        </div>
+        <p class="hint">
+          Files save under <code>~/Downloads/DiscordMedia/&lt;server&gt;/&lt;channel&gt;/</code>.
+          The extension remembers which attachment IDs it already downloaded so
+          re-running is safe; clear that memory above if you want to redownload.
+        </p>
+      </details>
+    </section>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

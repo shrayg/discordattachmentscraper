@@ -1,0 +1,26 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Node (in case you ever add tooling)
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Build output
+dist/
+build/
+
+# Local secrets — never commit
+.env
+.env.*
+*.token
+*.tokens
+*.secret
+auth.json
+discord-token.txt
+
+# Downloaded media (if you ever symlink the Chrome download dir into the repo)
+DiscordMedia/

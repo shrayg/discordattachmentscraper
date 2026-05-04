@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "Discord Channel Media Downloader",
+  "version": "1.0.2",
+  "description": "Bulk-download typical image, GIF, and video attachments from the open Discord channel (allowlisted MIME + extension). Throwaway accounts only \u2014 self-bot behavior violates Discord ToS.",
+  "minimum_chrome_version": "114",
+  "permissions": [
+    "downloads",
+    "storage",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://discord.com/*",
+    "https://*.discordapp.net/*",
+    "https://*.discordapp.com/*",
+    "https://media.discordapp.net/*",
+    "https://cdn.discordapp.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Discord Channel Media Downloader"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://discord.com/*"],
+      "js": ["injected.js"],
+      "run_at": "document_start",
+      "world": "MAIN",
+      "all_frames": false
+    },
+    {
+      "matches": ["https://discord.com/*"],
+      "js": ["content.js"],
+      "type": "module",
+      "run_at": "document_start",
+      "world": "ISOLATED",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": []
+}

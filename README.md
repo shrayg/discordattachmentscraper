@@ -33,7 +33,8 @@ thumbnails, linked CDN URLs, etc.) — that was the explicit scope you asked for
    (SVG skipped). Videos accept typical `video/*` types plus `application/mp4`,
    and any other `video/*` subtype unless the filename extension is clearly
    image-only (spoof guard). `application/octet-stream` uses the filename
-   extension only. Filenames are then checked
+   extension only. HTML / web-page attachments (`text/html`, `.html`,
+   `.mhtml`, etc.) are never downloaded. Filenames are then checked
    against a dangerous-extension blocklist, common double-extension spoofs
    (e.g. `photo.jpg.exe`, `drop.exe.png`), and Unicode direction overrides
    (U+202E RTLO, zero-width spaces). Anything that fails is skipped; the popup

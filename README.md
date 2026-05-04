@@ -29,11 +29,11 @@ thumbnails, linked CDN URLs, etc.) — that was the explicit scope you asked for
    oldest, throttled to ~55 requests / minute, with full 429 / `retry_after`
    handling and exponential backoff on 5xx.
 4. For every message, attachments are accepted only if they look like normal
-   consumer media: allowlisted extensions (e.g. PNG, JPEG, GIF, WebP, HEIC,
-   AVIF, TIFF, BMP; MP4, WebM, MOV, MKV, AVI, MPEG, 3GP, …) **and** compatible
-   MIME types. Broad `image/*` / `video/*` alone is not enough — e.g. SVG is
-   skipped. `application/octet-stream` is allowed only when the filename
-   extension is on the allowlist. Filenames are then checked
+   consumer media: allowlisted image extensions with matching `image/*` MIME
+   (SVG skipped). Videos accept typical `video/*` types plus `application/mp4`,
+   and any other `video/*` subtype unless the filename extension is clearly
+   image-only (spoof guard). `application/octet-stream` uses the filename
+   extension only. Filenames are then checked
    against a dangerous-extension blocklist, common double-extension spoofs
    (e.g. `photo.jpg.exe`, `drop.exe.png`), and Unicode direction overrides
    (U+202E RTLO, zero-width spaces). Anything that fails is skipped; the popup

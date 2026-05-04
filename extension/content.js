@@ -37,7 +37,7 @@ const IMAGE_EXT = new Set([
 ]);
 // Typical consumer video formats only.
 const VIDEO_EXT = new Set([
-  "mp4", "m4v", "mov", "webm", "mkv", "avi", "mpeg", "mpg", "3gp", "3g2",
+  "mp4", "m4v", "mov", "webm", "mkv", "avi", "mpeg", "mpg", "3gp", "3g2", "ogv",
 ]);
 
 const TYPICAL_IMAGE_MIMES = new Set([
@@ -66,6 +66,7 @@ const TYPICAL_VIDEO_MIMES = new Set([
   "video/mpg",
   "video/3gpp",
   "video/3gpp2",
+  "video/ogg",
 ]);
 
 const state = {
@@ -111,9 +112,10 @@ function baseMimeType(contentType) {
 }
 
 /**
- * Only typical image / video / GIF attachments. Requires MIME + extension to
- * agree when both are present; unknown image/* or video/* subtypes are
- * rejected unless the filename extension is on the allowlist.
+ * Typical image / video / GIF attachments. Images still require a matching
+ * extension when the filename has one. Videos trust Discord's `video/*` and
+ * `application/mp4` unless the filename extension is clearly image-only
+ * (spoof guard at top).
  * @returns {"image" | "video" | null}
  */
 function classifyAttachment(att) {
@@ -134,9 +136,18 @@ function classifyAttachment(att) {
     if (!ext || extImage) return "image";
     return null;
   }
+  // Typical video MIME from Discord / clients — allow even when the filename
+  // extension is missing or odd (mobile uploads, renamed clips). Still block
+  // obvious cross-kind spoof (image extension + video MIME) above.
   if (mimeVideo) {
-    if (!ext || extVideo) return "video";
-    return null;
+    if (extImage) return null;
+    return "video";
+  }
+
+  // Some stacks label MP4 as application/mp4 instead of video/mp4.
+  if (baseMime === "application/mp4") {
+    if (extImage) return null;
+    return "video";
   }
 
   // Discord sometimes uses application/octet-stream; trust filename only then.
@@ -151,9 +162,11 @@ function classifyAttachment(att) {
     if (extImage) return "image";
     return null;
   }
+  // Any other video/* (codecs variants, vendor types) — trust unless filename
+  // is clearly an image type only.
   if (baseMime.startsWith("video/")) {
-    if (extVideo) return "video";
-    return null;
+    if (extImage) return null;
+    return "video";
   }
 
   return null;

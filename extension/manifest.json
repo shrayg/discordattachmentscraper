@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Discord Channel Media Downloader",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Bulk-download typical image, GIF, and video attachments from the open Discord channel (allowlisted MIME + extension). Throwaway accounts only \u2014 self-bot behavior violates Discord ToS.",
   "minimum_chrome_version": "114",
   "permissions": [

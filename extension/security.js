@@ -1,6 +1,9 @@
 /**
  * Filename safety for Discord attachment downloads.
- * Shared by content.js (pre-filter) and background.js (defense in depth).
+ * Loaded as a classic script: content_scripts list `security.js` before
+ * `content.js` (shared isolated-world scope), and the service worker pulls it
+ * in via importScripts(). Do not use `export` here — ES-module content scripts
+ * are unreliable in Chromium and can fail to inject entirely.
  */
 
 // Unicode tricks used to spoof file types in Explorer / file managers.
@@ -37,7 +40,7 @@ const SPOOF_DANGEROUS_THEN_IMAGE =
  * @param {string} s
  * @returns {string}
  */
-export function stripDangerousUnicode(s) {
+function stripDangerousUnicode(s) {
   return String(s ?? "").replace(DANGEROUS_UNICODE, "");
 }
 
@@ -45,7 +48,7 @@ export function stripDangerousUnicode(s) {
  * @param {string} rawFilename
  * @returns {{ ok: boolean, reason?: string, cleaned: string }}
  */
-export function analyzeFilenameSecurity(rawFilename) {
+function analyzeFilenameSecurity(rawFilename) {
   let cleaned = stripDangerousUnicode(String(rawFilename ?? ""));
   // Strip path segments if a path ever slipped through.
   cleaned = cleaned.replace(/\\/g, "/");

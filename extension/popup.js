@@ -44,27 +44,44 @@ function shortId(id, head = 4, tail = 4) {
   return `${s.slice(0, head)}…${s.slice(-tail)}`;
 }
 
+const DISCORD_APP_PREFIXES = [
+  "https://discord.com/",
+  "https://canary.discord.com/",
+  "https://ptb.discord.com/",
+];
+
+function isDiscordAppUrl(url) {
+  if (!url) return false;
+  return DISCORD_APP_PREFIXES.some((p) => url.startsWith(p));
+}
+
+function tabPathForDisplay(url) {
+  // Strip origin so TAB row shows "/channels/..." regardless of host.
+  return url.replace(/^https:\/\/[^/]+/, "");
+}
+
 async function getActiveDiscordTab() {
   const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
   const tab = tabs[0];
-  if (!tab || !tab.url || !tab.url.startsWith("https://discord.com/")) return null;
+  if (!tab || !isDiscordAppUrl(tab.url)) return null;
   return tab;
 }
 
 async function refresh() {
   const tab = await getActiveDiscordTab();
   if (!tab) {
-    els.tabUrl.textContent = "Not on discord.com";
+    els.tabUrl.textContent = "Not on Discord (app)";
     els.guildId.textContent = "—";
     els.channelId.textContent = "—";
     els.authStatus.textContent = "—";
     els.startBtn.disabled = true;
     els.stopBtn.disabled = true;
-    els.hint.textContent = "Open https://discord.com in this tab and navigate into a channel.";
+    els.hint.textContent =
+      "Open Discord in this tab (discord.com, canary, or PTB) and navigate into a channel.";
     return;
   }
   activeTabId = tab.id;
-  els.tabUrl.textContent = tab.url.replace("https://discord.com", "");
+  els.tabUrl.textContent = tabPathForDisplay(tab.url);
 
   let state;
   try {

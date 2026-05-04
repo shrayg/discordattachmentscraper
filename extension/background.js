@@ -1,4 +1,4 @@
-import { analyzeFilenameSecurity, stripDangerousUnicode } from "./security.js";
+importScripts("security.js");
 
 // MV3 service worker. Receives batched download requests from the content
 // script and saves attachments to disk via chrome.downloads with a stable,

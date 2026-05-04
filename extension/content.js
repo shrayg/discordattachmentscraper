@@ -1,6 +1,6 @@
-import { analyzeFilenameSecurity, stripDangerousUnicode } from "./security.js";
-
 // Runs in the ISOLATED world on every discord.com page at document_start.
+// `security.js` is listed first in manifest.json so stripDangerousUnicode /
+// analyzeFilenameSecurity exist in this shared scope (classic scripts only).
 // Responsibilities:
 //   1. Listen for postMessages from injected.js (auth header + URL changes).
 //   2. Persist the latest captured auth + channel context to chrome.storage so

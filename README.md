@@ -101,6 +101,7 @@ All host permissions are scoped to `discord.com` and Discord's CDN domains.
 
 | Symptom | Fix |
 | --- | --- |
+| "Could not reach the page script" | Reload the Discord tab. Then open `chrome://extensions`, find this extension, and click **Reload** so the latest `manifest.json` is applied (older builds used an ES-module content script that sometimes failed to inject). |
 | Popup says "Auth captured: No" forever | Click on a channel in Discord, then reopen the popup. If the page just loaded, give the client ~1 s. |
 | 401 in the error box | Token rotated. Click around in Discord to re-capture, then start again. |
 | 403 in the error box | Your account can't read that channel. Check role permissions. |
